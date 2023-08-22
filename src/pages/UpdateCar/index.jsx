@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import NavBar from "../../components/NavBar";
 
-import { postCar } from "../../services/api";
-import { useNavigate } from "react-router-dom";
+import {  getCarById, putCar } from "../../services/api";
+import { useNavigate, useParams } from "react-router-dom";
 
-const RegisterCar = () => {
+const UpdateCar = () => {
     const navigate = useNavigate();
     const [plate, setPlate] = useState("");
     const [brand, setBrand] = useState("");
@@ -16,31 +16,47 @@ const RegisterCar = () => {
     const [description, setDescription] = useState("");
     const [pricePerDay, setPricePerDay] = useState("");
     const [status, setStatus] = useState("");
+    const {id} = useParams();
+
+    useEffect(() =>{
+        loadCar();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await postCar(plate, brand, model, category, image, year, description, pricePerDay);
+            const response = await putCar(id, plate, brand, model, category, image, year, description, pricePerDay);
             setStatus(response.status);
         } catch (error) {
             setStatus(error.response.status);
         }
     }
 
+    const loadCar = async () =>{
+        const response = await getCarById(id);
+        console.log(response.data);
+        setPlate(response.data.plate);
+        setBrand(response.data.brand);
+        setModel(response.data.model);
+        setCategory(response.data.category);
+        setImage(response.data.image);
+        setYear(response.data.year);
+        setDescription(response.data.description);
+        setPricePerDay(response.data.pricePerDay);
+    }
+
     return (
         <div>
             <NavBar />
-            <br />
-            <div id="login">
             {(() => {
                     switch (status) {
-                        case 201:
+                        case 200:
                             return (
                                 <div class="alert alert-success" role="alert">
-                                    Veículo cadastrado com sucesso!
+                                    Veículo atualizado com sucesso!
                                 </div>
                             )
-                        case 400:
+                            case 400:
                             return (
                                 <div class="alert alert-danger" role="alert">
                                     veículo já cadastrado anteriormente!
@@ -48,12 +64,13 @@ const RegisterCar = () => {
                             )
                     }
                 })()}
+            <div id="login">
                 <div id="form">
-                    <p class="h1">Cadastrar veículo</p>
+                    <p class="h1">Atualizar veículo</p>
                     <form onSubmit={handleSubmit}>
                         <div class="form-group">
                             <label for="plate">Placa</label>
-                            <input type="text" class="form-control" id="plate" placeholder="Exemplo: AAA0000" value={plate} onChange={(e) => setPlate(e.target.value)} required />
+                            <input type="text" class="form-control" id="plate" placeholder="Exemplo: AAA0000" value={plate} onChange={(e) => setPlate(e.target.value)} required disabled/>
                         </div>
                         <div class="form-group">
                             <label for="brand">Marca</label>
@@ -92,7 +109,7 @@ const RegisterCar = () => {
                             <input type="number" class="form-control" id="pricePerDay" placeholder="Exemplo: 000,00" value={pricePerDay} onChange={(e) => setPricePerDay(e.target.value)} required />
                         </div>
                         <br />
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <button type="submit" class="btn btn-primary">Atualizar</button>
                     </form>
                 </div>
             </div>
@@ -100,4 +117,4 @@ const RegisterCar = () => {
     )
 }
 
-export default RegisterCar;
+export default UpdateCar;

@@ -46,14 +46,14 @@ const NavBar = () => {
   }
 
   const registerCar = () => {
-    navigate("/registerCar");
+    navigate("/register-car");
   }
 
   return (
     <div>
       <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">SISTEMA PARA ALUGUEL DE CARROS</a>
+          <a class="navbar-brand" href="#">ALUGUEL DE CARROS</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -62,12 +62,16 @@ const NavBar = () => {
               <li class="nav-item">
                 <a class="nav-link active" href="#" aria-current="page" onClick={home}>Inicio</a>
               </li>
-              <li class="nav-item">
+              {!user &&(
+                  <>
+                   <li class="nav-item">
                 <a class="nav-link" href="#" onClick={login}>Iniciar sessão</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#" onClick={register}>Cadastre-se</a>
-              </li>
+              </li></>
+                ) 
+              }
               {roles.find((role) => role.role == "ROLE_ADMIN") && (
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
