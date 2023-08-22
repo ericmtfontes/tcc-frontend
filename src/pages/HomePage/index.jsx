@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { api, getCars } from '../../services/api';
+import { api, getCars, carDelete } from '../../services/api';
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -38,15 +38,20 @@ const HomePage = () => {
             setStatus(response.status);
         } catch (error) {
             setStatus(error.response.status);
-            console.log(error);
         }
     };
+
+    const deleteCar = (id) => {
+        alert(`Voce está exluindo o veículo de id: ${id}`);
+        carDelete(id);
+        window.location.reload();
+    }
 
     const login = () => {
         navigate("/login");
     }
     const login2 = () => {
-        navigate("/registerCar");
+        navigate("/register-car");
     }
 
     return (
@@ -56,20 +61,21 @@ const HomePage = () => {
                 switch (status) {
                     case 200:
                         return (
-                            <div class="row row-cols-1 row-cols-md-4">
+                            <div class="row row-cols-1 row-cols-md-3">
                                 {
                                     cars.map((car) => (
-                                        <div class="col mb-4">
+                                        <div class="col mb-3">
                                             <div class="card">
-                                                <img src={car.image} class="card-img-top" alt="..." />
+                                                <img src={car.image} class="card-img-top"/>
                                                 <div class="card-body">
-                                                    <h5 class="card-title">{car.brand}/{car.model}</h5>
+                                                    <h5 class="card-title">{car.brand}/{car.model} - {car.year}</h5>
                                                     <p class="h5">{car.pricePerDay.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                                                    <p class="h6">{car.year}</p>
                                                     <button type="button" class="btn btn-primary" onClick={!user ? (login) : (login2)}>Alugar</button>
                                                     {roles.find((role) => role.role == "ROLE_ADMIN") && (
-                                                        <><button type="button" class="btn btn-warning">Atualizar</button>
-                                                            <Link to={`/cars/${car.id}`}><button type="button" class="btn btn-danger">Exluir</button></Link></>
+                                                        <><Link type="button" class="btn btn-warning"
+                                                        to={`/update-car/${car.id}`}
+                                                        >Atualizar</Link>
+                                                            <><button type="button" class="btn btn-danger" onClick={() => deleteCar(car.id)}>Exluir</button></></>
                                                     )}
                                                 </div>
                                             </div>
