@@ -14,6 +14,7 @@ import RegisterCar from './pages/RegisterCar';
 
 import { AuthProvider,  AuthContext} from "./contexts/auth";
 import UpdateCar from './pages/UpdateCar';
+import RentCar from './pages/RentCar';
 
 const AppRoutes = () => {
     const Private = ({children}) => {
@@ -34,6 +35,7 @@ const AppRoutes = () => {
                     <Route exact path="/login" element={<LoginPage/>}/>
                     <Route exact path="/register-car" element={<Private><RegisterCar/></Private>}/>
                     <Route exact path="/update-car/:id" element={<Private><UpdateCar/></Private>}/>
+                    <Route exact path="/rent-car/:idCar" element={<Private><RentCar/></Private>}/>
                     <Route exact path="/" element={<HomePage/>}/>
                     <Route exact path="/register" element={<RegisterPage/>}/>
                 </Routes>

@@ -31,3 +31,7 @@ export const putCar = (id, plate, brand, model, category, image, year, descripti
 export const carDelete = (id) => {
     return api.delete(`/cars/${id}`);
 }
+
+export const rentCar = (idCar, id, day) => {
+    return api.post('/cars/rent', {idCar, id, day});
+}

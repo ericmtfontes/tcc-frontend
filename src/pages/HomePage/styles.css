@@ -4,10 +4,10 @@
 }
 
 .alert-empty-cars {
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
     justify-content: center;
-    min-height: 100vh;
-    padding: 0 2rem;
+    align-items: center;
 }

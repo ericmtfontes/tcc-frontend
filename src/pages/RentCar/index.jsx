@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 
 import NavBar from "../../components/NavBar";
 
-import {  getCarById, putCar } from "../../services/api";
+import {  getCarById, rentCar } from "../../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 
-const UpdateCar = () => {
-    const navigate = useNavigate();
+const RentCar = () => {
+    const {idCar} = useParams();
     const [plate, setPlate] = useState("");
     const [brand, setBrand] = useState("");
     const [model, setModel] = useState("");
@@ -15,17 +15,20 @@ const UpdateCar = () => {
     const [year, setYear] = useState("");
     const [description, setDescription] = useState("");
     const [pricePerDay, setPricePerDay] = useState("");
+    const [user, setUser] = useState("");
+    const [day, setDay] = useState();
     const [status, setStatus] = useState("");
-    const {id} = useParams();
 
     useEffect(() =>{
         loadCar();
+        const recoveredUser = localStorage.getItem('user');
+        setUser(JSON.parse(recoveredUser));
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await putCar(id, plate, brand, model, category, image, year, description, pricePerDay);
+            const response = await rentCar(idCar, user.id, day);
             setStatus(response.status);
         } catch (error) {
             setStatus(error.response.status);
@@ -33,7 +36,7 @@ const UpdateCar = () => {
     }
 
     const loadCar = async () =>{
-        const response = await getCarById(id);
+        const response = await getCarById(idCar);
         console.log(response.data);
         setPlate(response.data.plate);
         setBrand(response.data.brand);
@@ -52,41 +55,45 @@ const UpdateCar = () => {
             <div id="login">
             {(() => {
                     switch (status) {
-                        case 200:
+                        case 201:
                             return (
                                 <div class="alert alert-success" role="alert">
-                                    Veículo atualizado com sucesso!
+                                    Aluguel Realizado com sucesso!
                                 </div>
                             )
                             case 400:
                             return (
                                 <div class="alert alert-danger" role="alert">
-                                    veículo já cadastrado anteriormente!
+                                    Não foi possível realizar o aluguel!
                                 </div>
                             )
                     }
                 })()}
                 <div id="form">
-                    <p class="h1">Atualizar</p>
+                    <p class="h1">Alugar</p>
                     <form onSubmit={handleSubmit}>
                         <br />
                         <h3>Dados do veículo</h3>
                         <div class="form-group">
+                            <label for="idCar">Id</label>
+                            <input type="number" class="form-control" id="idCar" value={idCar} disabled/>
+                        </div>
+                        <div class="form-group">
                             <label for="plate">Placa</label>
-                            <input type="text" class="form-control" id="plate" placeholder="Exemplo: AAA0000" value={plate} onChange={(e) => setPlate(e.target.value)} required disabled/>
+                            <input type="text" class="form-control" id="plate" value={plate} disabled/>
                         </div>
                         <div class="form-group">
                             <label for="brand">Marca</label>
-                            <input type="text" class="form-control" id="brand" placeholder="Exemplo: Chevrolet" value={brand} onChange={(e) => setBrand(e.target.value)} required />
+                            <input type="text" class="form-control" id="brand" value={brand} disabled/>
                         </div>
                         <div class="form-group">
                             <label for="model">Modelo</label>
-                            <input type="text" class="form-control" id="model" placeholder="Exemplo: Onix" value={model} onChange={(e) => setModel(e.target.value)} required />
+                            <input type="text" class="form-control" id="model" value={model} disabled/>
                         </div>
                         <div class="form-group">
                             <label for="model">Categoria</label>
                             <div class="input-group mb-3">
-                                <select class="form-select" id="inputGroupSelect01" value={category} onChange={(e) => setCategory(e.target.value)} required>
+                                <select class="form-select" id="inputGroupSelect01" value={category} disabled> 
                                     <option selected>Escolha...</option>
                                     <option value="HATCH">HATCH</option>
                                     <option value="SEDAN">SEDAN</option>
@@ -97,22 +104,36 @@ const UpdateCar = () => {
                         </div>
                         <div class="form-group">
                             <label for="image">Imagem</label>
-                            <input type="text" class="form-control" id="image" placeholder="Cole o link da imagem" value={image} onChange={(e) => setImage(e.target.value)} required />
+                            <input type="text" class="form-control" id="image" value={image} disabled/>
                         </div>
                         <div class="form-group">
                             <label for="year">Ano</label>
-                            <input type="number" class="form-control" id="year" placeholder="Exemplo: yyyy" value={year} onChange={(e) => setYear(e.target.value)} required />
+                            <input type="number" class="form-control" id="year" value={year} disabled/>
                         </div>
                         <div class="form-group">
                             <label for="description">Descrição</label>
-                            <input type="text" class="form-control" id="description" placeholder="Exemplo: veículo bem conservado" value={description} onChange={(e) => setDescription(e.target.value)} required />
+                            <input type="text" class="form-control" id="description" value={description} disabled/>
                         </div>
                         <div class="form-group">
                             <label for="pricePerDay">Preço do aluguel diário</label>
-                            <input type="number" class="form-control" id="pricePerDay" placeholder="Exemplo: 000,00" value={pricePerDay} onChange={(e) => setPricePerDay(e.target.value)} required />
+                            <input type="number" class="form-control" id="pricePerDay" value={pricePerDay} disabled/>
                         </div>
                         <br />
-                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                        <h3>Dados do locatário</h3>
+                        <div class="form-group">
+                            <label for="idUser">Id</label>
+                            <input type="number" class="form-control" id="idUser" value={user.id} disabled/>
+                        </div>
+                        <div class="form-group">
+                            <label for="nameUser">Nome</label>
+                            <input type="text" class="form-control" id="nameUser" value={user.name} disabled/>
+                        </div>
+                        <div class="form-group">
+                            <label for="day">Deseja alugar por quantos dias?</label>
+                            <input type="number" class="form-control" id="day" placeholder="Exemplo: 2" value={day} onChange={(e) => setDay(e.target.value)} required/>
+                        </div>
+                        <br />
+                        <button type="submit" class="btn btn-primary">Confirmar aluguel</button>
                     </form>
                 </div>
             </div>
@@ -120,4 +141,4 @@ const UpdateCar = () => {
     )
 }
 
-export default UpdateCar;
+export default RentCar;
