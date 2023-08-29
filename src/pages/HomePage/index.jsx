@@ -47,13 +47,6 @@ const HomePage = () => {
         window.location.reload();
     }
 
-    const login = () => {
-        navigate("/login");
-    }
-    const login2 = () => {
-        navigate("/register-car");
-    }
-
     return (
         <div>
             <NavBar />
@@ -64,16 +57,17 @@ const HomePage = () => {
                             <div class="row row-cols-1 row-cols-md-3">
                                 {
                                     cars.map((car) => (
-                                        <div class="col mb-3">
+                                        <div class="col">
                                             <div class="card">
-                                                <img src={car.image} class="card-img-top"/>
+                                                <img src={car.image} class="card-img-top" />
                                                 <div class="card-body">
-                                                    <h5 class="card-title">{car.brand}/{car.model} - {car.year}</h5>
-                                                    <p class="h5">{car.pricePerDay.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                                                    <button type="button" class="btn btn-primary" onClick={!user ? (login) : (login2)}>Alugar</button>
+                                                    <p class="h6">{car.brand}/{car.model} - {car.year}</p>
+                                                    <p class="h6">Preço do aluguel diário</p>
+                                                    <p class="h6">{car.pricePerDay.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                                                    <Link type="button" class="btn btn-primary" to={!user ? ("/login") : (`/rent-car/${car.id}`)}>Alugar</Link>
                                                     {roles.find((role) => role.role == "ROLE_ADMIN") && (
                                                         <><Link type="button" class="btn btn-warning"
-                                                        to={`/update-car/${car.id}`}
+                                                            to={`/update-car/${car.id}`}
                                                         >Atualizar</Link>
                                                             <><button type="button" class="btn btn-danger" onClick={() => deleteCar(car.id)}>Exluir</button></></>
                                                     )}
@@ -87,7 +81,7 @@ const HomePage = () => {
                     case 404:
                         return (
                             <>
-                                <h3 class="alert-empty-cars">Todos os veículos da plataforma estão alugados. Volte mais tarde!</h3>
+                                <h3 class="alert-empty-cars">Nenhum veículo disponível. Volte mais tarde!</h3>
                             </>
                         )
                 }

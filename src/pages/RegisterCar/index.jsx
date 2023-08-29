@@ -49,8 +49,10 @@ const RegisterCar = () => {
                     }
                 })()}
                 <div id="form">
-                    <p class="h1">Cadastrar veículo</p>
+                    <p class="h1">Cadastrar</p>
                     <form onSubmit={handleSubmit}>
+                        <br />
+                        <h3>Dados do veículo</h3>
                         <div class="form-group">
                             <label for="plate">Placa</label>
                             <input type="text" class="form-control" id="plate" placeholder="Exemplo: AAA0000" value={plate} onChange={(e) => setPlate(e.target.value)} required />
