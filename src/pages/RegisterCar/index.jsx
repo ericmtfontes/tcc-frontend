@@ -32,7 +32,7 @@ const RegisterCar = () => {
             <NavBar />
             <br />
             <div id="login">
-            {(() => {
+                {(() => {
                     switch (status) {
                         case 201:
                             return (
@@ -98,6 +98,7 @@ const RegisterCar = () => {
                     </form>
                 </div>
             </div>
+            <br />
         </div>
     )
 }
