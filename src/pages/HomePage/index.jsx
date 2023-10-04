@@ -54,7 +54,7 @@ const HomePage = () => {
                 switch (status) {
                     case 200:
                         return (
-                            <div class="row row-cols-1 row-cols-md-3">
+                            <div class="row row-cols-1 row-cols-md-4">
                                 {
                                     cars.map((car) => (
                                         <div class="col">
@@ -66,7 +66,7 @@ const HomePage = () => {
                                                     <p class="h6">{car.pricePerDay.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
                                                     <Link type="button" class="btn btn-primary" to={!user ? ("/login") : (`/rent-car/${car.id}`)}>Alugar</Link>
                                                     {roles.find((role) => role.role == "ROLE_ADMIN") && (
-                                                        <><Link type="button" class="btn btn-warning"
+                                                        <><Link type="button" class="btn btn-danger"
                                                             to={`/update-car/${car.id}`}
                                                         >Atualizar</Link>
                                                             <><button type="button" class="btn btn-danger" onClick={() => deleteCar(car.id)}>Exluir</button></></>

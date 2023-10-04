@@ -1,6 +1,8 @@
 .card {
     width: 20rem;
-    margin: 3rem;
+    margin: 1rem;
+    border: none;
+    box-shadow: 30px 30px 20px rgba(0, 0, 0, 0.800);
 }
 
 .alert-empty-cars {
@@ -10,4 +12,12 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.card-body{
+    background-image: linear-gradient(to right, #fffffb, #f9a831);
+}
+
+.btn{
+    margin: 10px;
 }

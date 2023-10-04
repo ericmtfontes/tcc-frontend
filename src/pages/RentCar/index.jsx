@@ -137,6 +137,7 @@ const RentCar = () => {
                     </form>
                 </div>
             </div>
+            <br />
         </div>
     )
 }
